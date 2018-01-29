@@ -1,0 +1,3 @@
+parabol_files_browser:
+    path:     /files/browser
+    defaults: { _controller: ParabolFilesBrowserBundle:Browser:index }

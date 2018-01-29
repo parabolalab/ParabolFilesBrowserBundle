@@ -1,0 +1,481 @@
+{% extends layoutTemplate %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link  href="/admin/components/cropperjs/dist/cropper.css" rel="stylesheet">
+	<link  href="/bundles/parabolfilesbrowser/css/parabol_upload.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/admin/components/cropperjs/dist/cropper.js"></script>
+{% endblock javascripts %}
+
+
+{% block wrapper_content %}
+
+
+<div style="padding: 15px 30px;">
+	<div class="box box-default">
+		<div class="box-header with-border">
+		  <i class="fa fa-files-o"></i>
+
+		  <h3 class="box-title">{% trans %}Files Browser{% endtrans %}</h3>
+		</div>
+		<div class="box-body">
+			<div  class="container-fluid" style="padding: 0 15px 15px;">
+
+				<div class="row" id="thumbs-container">
+					{{ form_start(form) }}
+					{{ form_widget(form) }}
+					{{ form_end(form) }}
+				</div>
+
+				<div class="row" style="margin-top: 15px";>
+					{{ render(controller(filesAction, app.request.query.all)) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="cropper">
+	<img src="/bundles/parabolbase/images/preloaders/loading-spin.svg" class="spin-loader" >
+  	<div class="stats"></div>
+ 	<div class="btn-close"><i class="fa fa-times-circle fa-lg"></i></div>
+  <div class="image-container" >
+  	<img id="image" src="">
+  </div>
+  <div class="cropper-bar">
+  	<i class="fa fa-arrows"></i>
+  	<i class="fa fa-crop active"></i>
+  	<i class="fa fa-arrows-alt"></i>
+  	<i class="fa fa-search-minus"></i>
+  	<i class="fa fa-search-plus"></i>
+  	<i class="fa fa-undo"></i>
+  	<i class="fa fa-repeat"></i>
+  	<i class="fa fa-arrows-h"></i>
+  	<i class="fa fa-arrows-v"></i>
+  	<i class="fa fa-save"></i>
+  </div>
+
+	<div class="modal fade" id="cropperResizeImage" tabindex="-1" role="dialog">
+	  <div class="modal-dialog modal-sm" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="{% trans %}Close{% endtrans %}"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">{% trans %}Resize Image{% endtrans %}</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<img src="/bundles/parabolbase/images/preloaders/loading-spin-dark.svg" class="spin-loader" >
+	        <form class="form-inline">
+	        	<input type="hidden" name="id" value="" />
+	        	<div class="row">
+			  <div class="form-group col-xs-6">
+			    <div class="input-group">
+			      <input type="text" class="form-control" name="width" id="resize_width" placeholder="{% trans %}width{% endtrans %}">
+			      <div class="input-group-addon">px</div>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group col-xs-6">
+			  	<span class="x">&times;</span>
+			    <div class="input-group">
+			      <input type="text" class="form-control" name="height" id="resize_height" placeholder="{% trans %}height{% endtrans %}">
+			      <div class="input-group-addon">px</div>
+			    </div>
+			  </div>
+			  </div>
+			  <div class="row">
+				  <div class="checkbox col-xs-12">
+				    <label>
+				      <input type="checkbox" name="proportion" value="1" checked="checked"> {% trans %}Constrain Proportions{% endtrans %}
+				    </label>
+				  </div>
+			  </div>
+			  {# <div class="row">
+				  <div class="checkbox col-xs-12">
+				    <label>
+				      <input type="checkbox" name="override" value="1" checked="checked"> {% trans %}Override the File{% endtrans %}
+				    </label>
+				  </div>
+			  </div> #}
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
+	        <button type="button" class="btn btn-primary" data-action="{#{ path('parabol_uploader_resize') }#}">{% trans %}Resize{% endtrans %}</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+</div>
+
+<style>
+
+#cropper {
+	position: fixed; height: 100%; width: 100%; top: 0; display: none; background: #111; z-index: 100;
+}
+
+#cropper .image-container {
+	max-width: 100%; max-height: 100%;
+}
+#cropper .image-container img {
+	max-width: 100%;
+}
+#cropper .fa {
+	color: #fff;
+	cursor: pointer;
+}
+
+#cropper .btn-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 10000;
+}
+
+#cropper .stats {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: #fff;
+	padding: 3px 5px;
+}
+
+#cropper .cropper-bar {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.9);
+	padding: 0 2px;
+	left: 50%;
+	bottom: 50px;
+	margin-left: -100px;
+}
+
+#cropper .cropper-bar .fa {
+	padding: 5px 4px;
+}
+
+#cropper .cropper-bar .fa.active {
+	background: #00b0eb;
+}
+
+#cropper .spin-loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 1;
+	margin-top: -15px;
+	margin-left: -15px;
+}
+#cropper .cropper-bar .fa:hover {
+	color: #2ecbff;
+}
+
+#thumbs-container .control-label {
+	display: none;
+}
+
+#cropperResizeImage .x {
+	position: absolute;
+	color: #444;
+	left: -4px;
+	top: 5px;
+	font-size: 18px;
+}
+
+
+
+</style>
+
+<script type="text/javascript">
+
+
+
+	var iCheckProp = false
+
+
+
+	$(document).ready(function(){
+
+		$('.file-list ul.files').prepend(tmpl('template-download', dataFiles));	
+
+		setTimeout(function(){
+
+			$('.file-list ul.files').on('click', 'button.delete', function(){
+				e.stopPropagation();
+				alert('delete');
+			})
+
+			iCheckProp = $('#cropperResizeImage input[name=proportion]').parent('.icheckbox_minimal').length
+
+			if(iCheckProp)
+			{
+				$('#cropperResizeImage input[name=proportion]').change(function(){
+					if($(this).is(':checked')) $('#cropperResizeImage input[name=width]').trigger('proportion:on')
+				})
+			}
+
+
+
+		}, 200)
+	})
+	
+
+	var cropper = null;	
+	var parabolFileBrowserImage = null;
+	var $parabolFileBrowserCurrent = null;
+	var parabolFileBrowserPreventCKEditroAction = false;
+	var $corpperContainer = $('#cropper');
+
+
+	var defaultScale = 1;
+
+	(function ( $ ) {
+
+		$.fn.admin_core_showCropper = function () {
+
+					parabolFileBrowserPreventCKEditroAction = true;
+
+					$parabolFileBrowserCurrent = $(this).closest('li')
+
+					if(parabolFileBrowserImage) parabolFileBrowserImage.src = ''	
+					
+					
+					$corpperContainer.css({top: -$(window).height(), display: 'block'})
+					$corpperContainer.find('.spin-loader').fadeIn()
+					$corpperContainer.animate({'top': 0})	
+
+					var newImg = new Image;
+					newImg.onload = function() {
+				
+						parabolFileBrowserImage = document.getElementById('image');
+						parabolFileBrowserImage.src = this.src
+						
+						$('#cropper > .image-container').css({'width': $parabolFileBrowserCurrent.data('width'), height: $parabolFileBrowserCurrent.data('height')})
+						
+					
+
+						
+						
+						cropper = new Cropper(parabolFileBrowserImage, {
+						  crop: function(e) {
+		
+						    $('#cropper > .stats').html(parseInt(e.detail.width) + 'px x ' + parseInt(e.detail.height) + 'px');
+				
+						  }
+						})
+						
+						parabolFileBrowserImage.addEventListener('ready', function () {
+						  	
+						  	var $container = $('#cropper > .image-container > .cropper-container');
+							$container.css({
+								'margin-left': $('#cropper').width() > $container.width() ? ($('#cropper').width() - $container.width()) / 2 : 0,
+								'margin-top': $('#cropper').height() > $container.height() ? ($('#cropper').height() - $container.height()) / 2 : 0
+							})
+						})
+						
+
+						$corpperContainer.find('.spin-loader').fadeOut()
+						
+					}
+
+					newImg.src = $parabolFileBrowserCurrent.data('file');
+
+					return false;
+
+			}
+
+	}( jQuery ));
+
+	
+
+	$('#cropperResizeImage input[type=text]').keydown(function(e){
+		var allowedKeyCodes = [8,37,39,46,48,49,50,51,52,53,54,55,56,57]
+		if(allowedKeyCodes.indexOf(e.keyCode) == -1) e.preventDefault()
+	})
+
+	$('#cropperResizeImage input[type=text]').keyup(function(e){
+		var allowedKeyCodes = [8,46,48,49,50,51,52,53,54,55,56,57]
+		if(allowedKeyCodes.indexOf(e.keyCode) > -1 && (iCheckProp && $('#cropperResizeImage input[name=proportion]').parent('.icheckbox_minimal.checked').length || $('#cropperResizeImage input[name=proportion]').is(':checked')))
+		{
+			$(this).trigger('proportion:on')
+		}
+	})
+	
+	$('#cropperResizeImage input[name=width], #cropperResizeImage input[name=height]').on('proportion:on', calculateSize)
+
+
+
+
+	function calculateSize(event)
+	{
+		if($(this).val() != '')
+		{
+			if($(this).attr('name') == 'width') $('#cropperResizeImage input[name=height]').val(Math.round($(this).val() / defaultScale));
+			else $('#cropperResizeImage input[name=width]').val(Math.round($(this).val() * defaultScale));
+		}
+	}
+
+
+	function getUrlParam( paramName ) {
+            var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
+            var match = window.location.search.match( reParam );
+
+            return ( match && match.length > 1 ) ? match[1] : null;
+    }
+
+
+    function browser_removeFile($btn){
+    		
+			parabolFileBrowserPreventCKEditroAction = true
+			$li = $btn.closest('li')
+			$.get($btn.data('url'), function(data){
+				$li.remove()
+				parabolFileBrowserPreventCKEditroAction = false
+			})
+			return false
+		
+    }
+
+	function addFileToCkeditor(obj)
+	{
+		if(parabolFileBrowserPreventCKEditroAction) return;
+		
+		window.opener.CKEDITOR.tools.callFunction( getUrlParam( 'CKEditorFuncNum' ), $(obj).data('file') );
+		window.close()
+	}
+
+	function cropperClose()
+	{
+		$('#cropperResizeImage').modal('hide')
+		$('#cropper').animate({'top': -$(window).height() })
+		document.getElementById('image').src = ''
+		if(cropper) cropper.destroy()
+		parabolFileBrowserPreventCKEditroAction = false;
+	}
+
+
+	$('#cropperResizeImage .btn-primary').click(function(){
+		if(cropper) cropper.disable()
+		$('#cropperResizeImage').modal('hide')
+		$corpperContainer.find('.spin-loader').fadeIn()
+
+		$.post($(this).data('action'), $('#cropperResizeImage form').serialize(), function(data){
+			addThumb(data)
+			if(cropper) cropper.enable()
+			cropperClose()
+		})
+		
+
+	});
+
+	$('#cropper .btn-close').click(function(){
+		cropperClose()
+	})
+
+
+
+
+	$('#cropper .fa-arrows').click(function(){
+		cropper.setDragMode('move');
+		$('#cropper .fa-crop').removeClass('active')
+		$('#cropper .fa-arrows').addClass('active')
+	})
+	
+	$('#cropper .fa-crop').click(function(){
+		cropper.setDragMode('crop');
+		$('#cropper .fa-arrows').removeClass('active')
+		$('#cropper .fa-crop').addClass('active')
+	})
+
+	$('#cropper .fa-arrows-v').click(function(){
+		cropper.scaleY(cropper.getImageData().scaleY * -1);
+	})
+	
+	$('#cropper .fa-arrows-h').click(function(){
+		cropper.scaleX(cropper.getImageData().scaleX * -1);
+	})
+
+	$('#cropper .fa-search-plus').click(function(){
+		cropper.zoom(0.1);
+	})
+	
+	$('#cropper .fa-search-minus').click(function(){
+		cropper.zoom(-0.1);
+	})
+	$('#cropper .fa-repeat').click(function(){
+		cropper.rotate(10);
+	})
+	
+	$('#cropper .fa-undo').click(function(){
+		cropper.rotate(-10);
+	})
+
+	$('#cropper .fa-arrows-alt').click(function(){
+
+		$('#cropperResizeImage input[name=id]').val($parabolFileBrowserCurrent.data('id'));
+		$('#cropperResizeImage input[name=width]').val($parabolFileBrowserCurrent.data('width'));
+		$('#cropperResizeImage input[name=height]').val($parabolFileBrowserCurrent.data('height'));
+		defaultScale = $parabolFileBrowserCurrent.data('width') / $parabolFileBrowserCurrent.data('height')
+		if(iCheckProp)
+		{
+			$('#cropperResizeImage input[name=proportion]').iCheck('check')
+			$('#cropperResizeImage input[name=override]').iCheck('check')
+		} 
+		else
+		{
+			$('#cropperResizeImage input[name=proportion]').attr('checked', true)
+			$('#cropperResizeImage input[name=override]').attr('checked', true)
+		} 
+		$('#cropperResizeImage').modal({backdrop: false})
+	})
+
+	$('#cropper .fa-save').click(function(){
+
+		$corpperContainer.find('.spin-loader').fadeIn()
+
+		cropper.getCroppedCanvas().toBlob(function (blob) {
+		  var filename = new String(parabolFileBrowserImage.src).replace(/.*\//g, '').replace(/(\.[\w]+)$/, '-'+parseInt(cropper.getCropBoxData().width)+'x'+parseInt(cropper.getCropBoxData().height) + '$1');
+		  var formData = new FormData();
+		  formData.append('context','filebrowser');
+		  formData.append('filebrowser[]', blob, filename);
+		  
+		  // Use `jQuery.ajax` method
+		  $.ajax(sf_env + '/_uploader/upload', {
+		    method: "POST",
+		    data: formData,
+		    processData: false,
+		    contentType: false,
+		    dataType: 'json',
+		    success: function (data) {
+		    	
+		    	addThumb(data)
+		    	cropperClose()
+		    },
+		    error: function () {
+		      console.log('Upload error');
+		    }
+		  });
+		});
+	})
+
+	function addThumb(data)
+	{
+		$('.file-list ul.files').prepend(tmpl('template-download', data));
+		fixThumbView()
+	}
+
+	function fixThumbView()
+	{
+		if(typeof(parabol_file_browser_maxPerPage) == 'number')
+    	{
+    			if($('.file-list ul.files > li').length > parabol_file_browser_maxPerPage) $('.file-list ul.files > li:' + ($('#filebrowser-fileuploadInput').data('order') == 'desc' ? 'last' : 'first') + '-child').remove();
+    	}
+	}
+
+</script>
+
+{% endblock wrapper_content %}
+

@@ -1,0 +1,15 @@
+{
+    "name"        : "ParabolFilesBrowserBundle",
+    "version"     : "1.0.0",
+    "authors"     : [
+        "Marcin Kalota <marcin@parabolalab.com>"
+    ],
+    "description" : "Assets for the files browser bundle",
+    "dependencies": {
+        "jquery": ">=1.9.1",
+        "cropperjs": "~0.8"
+    },
+    "resolutions": {
+        "jquery": ">=1.9.1"
+    }
+}

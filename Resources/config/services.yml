@@ -1,0 +1,4 @@
+services:
+#    parabol_files_browser.example:
+#        class: Parabol\FilesBrowserBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

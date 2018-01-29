@@ -1,0 +1,50 @@
+
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+}
+.fileinput-button input {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin: 0px;
+	opacity: 0;
+	font-size: 200px;
+	direction: ltr;
+	cursor: pointer;
+}
+
+.template-download, .template-upload {
+	padding: 0; width: 100px; height: 100px; margin: 10px 10px 10px 0; overflow: hidden;
+}
+
+
+ul.files {
+	list-style: none;
+	padding-left: 0;
+}
+
+ul.files span.preview {
+	background: no-repeat center center / cover;
+	width: 98px;
+	height: 98px;
+	display: block;
+}
+ul.files li:hover small.sizes {
+position: absolute;
+z-index: 1222121;
+bottom: 0px;
+left: 0;
+width: 100%;
+color: #fff;
+background: rgba(0,0,0,0.8);
+}
+
+ul.files .placeholder {
+		height: 100px; width: 100px;
+}
+
+ul.files .delete {
+	font-size: 100%;
+	padding: 0 7px;
+}

@@ -1,0 +1,73 @@
+
+#photoEditor {
+	position: fixed; height: 100%; width: 100%; top: 0; display: none; background: #111; z-index: 100;
+}
+
+#photoEditor .image-container {
+	max-width: 100%; max-height: 100%;
+}
+#photoEditor .image-container img {
+	max-width: 100%;
+}
+#photoEditor .fa {
+	color: #fff;
+	cursor: pointer;
+}
+
+#photoEditor .btn-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 10000;
+}
+
+#photoEditor .stats {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: #fff;
+	padding: 3px 5px;
+	z-index: 1;
+    font-weight: 300;
+}
+
+#photoEditor .photoeditor-bar {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.9);
+	padding: 0 2px;
+	left: 50%;
+	bottom: 50px;
+	margin-left: -100px;
+}
+
+#photoEditor .photoeditor-bar .fa {
+	padding: 5px 4px;
+}
+
+#photoEditor .photoeditor-bar .fa.active {
+	background: #00b0eb;
+}
+
+#photoEditor .spin-loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 1;
+	margin-top: -15px;
+	margin-left: -15px;
+}
+#photoEditor .photoeditor-bar .fa:hover {
+	color: #2ecbff;
+}
+
+#thumbs-container .control-label {
+	display: none;
+}
+
+#cropperResizeImage .x {
+	position: absolute;
+	color: #444;
+	left: -4px;
+	top: 5px;
+	font-size: 18px;
+}
