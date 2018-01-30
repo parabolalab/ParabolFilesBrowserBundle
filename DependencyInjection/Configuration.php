@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('files_type')->defaultValue('Parabol\FilesUploadBundle\Form\Type\BlueimpType')->end()
-                ->scalarNode('files_action')->defaultValue('ParabolAdminCoreBundle:File\\List:browser')->end()
+                ->scalarNode('files_action')->defaultValue('ParabolFileAdminBundle:File\\List:browser')->end()
                 ->scalarNode('thumb_onclick')->defaultValue('addFileToCkeditor(this)')->end()
                 ->scalarNode('browser_template')->defaultValue('ParabolFilesBrowserBundle::browser.html.twig')->end()
                 ->scalarNode('layout_template')->defaultValue('ParabolAdminCoreBundle::base_admin_uncompressed.html.twig')->end()

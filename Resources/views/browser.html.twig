@@ -199,7 +199,7 @@
 
 	$(document).ready(function(){
 
-		$('.file-list ul.files').prepend(tmpl('template-download', dataFiles));	
+		$('.file-list ul.files').prepend(tmpl('filebrowser-template-download', dataFiles));	
 
 		setTimeout(function(){
 
@@ -463,7 +463,7 @@
 
 	function addThumb(data)
 	{
-		$('.file-list ul.files').prepend(tmpl('template-download', data));
+		$('.file-list ul.files').prepend(tmpl('filebrowser-template-download', data));
 		fixThumbView()
 	}
 

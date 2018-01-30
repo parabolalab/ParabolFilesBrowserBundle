@@ -1,0 +1,4 @@
+parabol_admin_files_browser:
+    resource: '@ParabolFilesBrowserBundle/Resources/config/routing.yml'
+    prefix:   /admin
+    options: { i18n: false }

@@ -25,13 +25,18 @@ class BrowserController extends Controller
 			$form = $this->createFormBuilder()
 				->add('filebrowser', $this->getParameter('parabol_files_browser.files_type'), [
 					'multiple' => true, 
-					'cropper' => true,
-					'order' => 'desc', 
+					'cropper' => false,
+					'order' => 'desc',
 					'thumb' => [
 						'onclick' => $this->getParameter('parabol_files_browser.thumb_onclick', '')
 					],
 					'description' => '',
 					'label' => ' ',
+					'attr' => [
+						'data' => [
+							'path' => 'filesbrowser'
+						]
+					]
 					])
 				->getForm();
 
