@@ -1,6 +1,6 @@
 {% extends layoutTemplate %}
 
-{% block stylesheets %}
+{#% block stylesheets %}
 	{{ parent() }}
 	<link  href="/admin/components/cropperjs/dist/cropper.css" rel="stylesheet">
 	<link  href="/bundles/parabolfilesbrowser/css/parabol_upload.css" rel="stylesheet">
@@ -9,7 +9,7 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script src="/admin/components/cropperjs/dist/cropper.js"></script>
-{% endblock javascripts %}
+{% endblock javascripts %#}
 
 
 {% block wrapper_content %}
@@ -199,7 +199,7 @@
 
 	$(document).ready(function(){
 
-		$('.file-list ul.files').prepend(tmpl('filebrowser-template-download', dataFiles));	
+		$('.file-list ul.files').prepend(tmpl('form_filebrowser-template-download', dataFiles));	
 
 		setTimeout(function(){
 
@@ -463,7 +463,7 @@
 
 	function addThumb(data)
 	{
-		$('.file-list ul.files').prepend(tmpl('filebrowser-template-download', data));
+		$('.file-list ul.files').prepend(tmpl('form_filebrowser-template-download', data));
 		fixThumbView()
 	}
 
